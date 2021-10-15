@@ -3,6 +3,7 @@ import dotenv from 'dotenv'
 dotenv.config()
 import axios from "axios"
 import { addDoc,collection, db, doc,setDoc,updateDoc,getDoc, arrayUnion, arrayRemove } from './firebase.js'
+import sslRedirect from 'heroku-ssl-redirect';
 
 import * as queryString from 'query-string';
 
@@ -20,6 +21,7 @@ var opn = require('opn');
 
 app.use(cors())
 app.use(cookieParser());
+app.use(sslRedirect());
 
 // { origin: 'http://127.0.0.1:3000/auth/google' }
 

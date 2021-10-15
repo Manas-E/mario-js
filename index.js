@@ -3,13 +3,13 @@ import dotenv from 'dotenv'
 dotenv.config()
 import axios from "axios"
 import { addDoc,collection, db, doc,setDoc,updateDoc,getDoc, arrayUnion, arrayRemove } from './firebase.js'
-import sslRedirect from 'heroku-ssl-redirect';
 
 import * as queryString from 'query-string';
 
 import { createRequire } from "module";
 const require = createRequire(import.meta.url);
 
+const sslRedirect = require('heroku-ssl-redirect').default
 
 const ejs =require("ejs");
 let cookieParser = require('cookie-parser');

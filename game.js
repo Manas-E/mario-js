@@ -6,7 +6,14 @@ kaboom({
     scale:1,
     debug:true,
     clearColor:[0,0,0,1],
+    background: [ 0, 0, 0,],
 });
+
+
+
+
+
+
 
 
 // sprites for level 1
@@ -25,6 +32,9 @@ loadSprite("unbox","http://127.0.0.1:5500//images//unbox.png");
 loadSprite("surprise","http://127.0.0.1:5500//images//surprise.png");
 loadSprite("mario1","http://127.0.0.1:5500//images//mariol1.png");
 loadSprite("mario2","http://127.0.0.1:5500//images//mariol2.png");
+loadSprite("turtle","http://127.0.0.1:5500//images//inturtle.png");
+
+
 
 
 
@@ -36,6 +46,22 @@ loadSprite("blue-shroom","http://127.0.0.1:5500//images//blue-shroom.png");
 loadSprite("blue-steel","http://127.0.0.1:5500//images//blue-steel.png");
 loadSprite("blue-surprise","http://127.0.0.1:5500//images//blue-surprise.png");
 loadSprite("blue-block","http://127.0.0.1:5500//images//blue-block.png");
+
+
+loadSound("powerjump", "sounds/powerjump.wav");
+loadSound("hitHurt","sounds/hitHurt.wav");
+loadSound("portal","sounds/portal.wav");
+loadSound("eatMushroom","sounds/eatMushroom.wav");
+
+loadSound("coin","sounds/coin.wav");
+loadSound("laser","sounds/laser.wav");
+loadSound("powerup","sounds/powerup.wav");
+loadSound("surprise","sounds/surprise.wav");
+
+loadSound("getCoin","sounds/getCoin.wav");
+
+
+
 
 
 let score=0;
@@ -57,8 +83,8 @@ scene("game",({level,score}) => {
     '       %     =*==%=                                                  ',
     '                                                               ',
     '                                                         ',
-    '                                      ->                 ',
-    '                        ^ ^ ^ ^   ^   ()                             ',
+    '                          &    &    ->                 ',
+    '                        ^  ^ ^  ^   ()                             ',
     '=========================================     =============================',
 ],
 [ 
@@ -80,8 +106,8 @@ scene("game",({level,score}) => {
     
 
     const MOVE_SPEED = 240;
-    const JUMP_FORCE = 500;
-    const BIG_JUMP_FORCE = 650;
+    const JUMP_FORCE = 700;
+    const BIG_JUMP_FORCE = 850;
     let CURRENT_JUMP_FORCE = JUMP_FORCE;
 
     let isJumping = false;
@@ -135,24 +161,25 @@ scene("game",({level,score}) => {
     const levelCfg={
         width:40,
         height:40,
-        '=': [sprite("block"),solid(),scale(2)],
-        '%': [sprite("surprise"),solid(),"coin-surprise",scale(2)],
-        '$': [sprite("coin"),"coin",scale(2)],
-        '*': [sprite("surprise"),solid(),"mushroom-surprise",scale(2)],
-        '}': [sprite("unbox"),solid(),scale(2)],
-        '(': [sprite("pipe-bottom-left"),solid(),scale(1.5)],
-        ')': [sprite("pipe-bottom-right"),solid(),scale(1)],
-        '-': [sprite("pipe-top-left"),solid(),scale(1),"pipe"],
-        '>': [sprite("pipe-top-right"),solid(),scale(1),"pipe"],
-        '^': [sprite("evil-shroom"),solid(),"dangerous",big(),scale(2)],
-        '#' : [sprite("mushroom"),solid(),"mushroom",body(),scale(2)],
-        'w': [sprite("blue-shroom"),solid(),"dangerous",big(),scale(1)],
-        'H' : [sprite("blue-brick"),solid(),"blue-brick",scale(1.5)],
-        's' : [sprite("blue-steel"),solid(),"blue-steel",scale(1.5)],
-        '@' : [sprite("blue-surprise"),solid(),"coin-surprise",scale(1)],
-        '~' : [sprite("blue-surprise"),solid(),"mushroom-surprise",scale(1)],
-       
-        'z' : [sprite("blue-block"),solid(),scale(1)],
+        '=': () => [sprite("block"),area(),solid(),scale(2)],
+        '%': () => [sprite("surprise"),area(),solid(),"coin-surprise",scale(2)],
+        '$': () => [sprite("coin"),area(),"coin",scale(2)],
+        '*': () => [sprite("surprise"),area(),solid(),"mushroom-surprise",scale(2)],
+        '}': () => [sprite("unbox"),area(),solid(),scale(2)],
+        '(': () => [sprite("pipe-bottom-left"),area(),solid(),scale(1.5)],
+        ')': () => [sprite("pipe-bottom-right"),area(),solid(),scale(1)],
+        '-': () => [sprite("pipe-top-left"),area(),solid(),scale(1),"pipe"],
+        '>': () => [sprite("pipe-top-right"),area(),solid(),scale(1),"pipe"],
+        '^': () => [sprite("evil-shroom"),area(),solid(),"dangerous",big(),scale(2)],
+        '#' :() => [sprite("mushroom"),area(),solid(),"mushroom",body(),scale(2)],
+        'w': () => [sprite("blue-shroom"),area(),solid(),"dangerous",big(),scale(1)],
+        'H' : () => [sprite("blue-brick"),area(),solid(),"blue-brick",scale(1.5)],
+        's' : () => [sprite("blue-steel"),area(),solid(),"blue-steel",scale(1.5)],
+        '@' : () => [sprite("blue-surprise"),area(),solid(),"coin-surprise",scale(1)],
+        '~' : () => [sprite("blue-surprise"),area(),solid(),"mushroom-surprise",scale(1)],
+        '&': () => [sprite("turtle"),area(),solid(),"turtle",big(),scale(2)],
+      
+        'z' : () => [sprite("blue-block"),area(),solid(),scale(1)],
 
 
 
@@ -167,22 +194,21 @@ scene("game",({level,score}) => {
 
 
 
-    const player = add([sprite("mario"),solid(),
-                    pos(30,0),body(),big(),origin('bot'),scale(2)
+    const player = add([sprite("mario"),area(),solid(),
+                    pos(100,0),body(),big(),origin('bot'),scale(2), layer('obj')
                 ]);
 
 
     var k=0;
-    const gameLevel = addLevel(maps[level],levelCfg);
+    const gameLevel = addLevel(maps[0],levelCfg);
 
-    const scoreLabel= add([text(score), pos(30,25),scale(2), layer('ui'),
+    const scoreLabel= add([text("Score " +score,1), pos(30,40),scale(0.5), layer('ui'),
     {
         value:score,
     }]);
 
-    add([text("level " + level),pos(30,6),scale(2), layer('ui')]);
-
-
+    add([text("level " + level,1),pos(30,6),scale(0.5), layer('ui')]);
+   
     keyDown("q",()=>{
         if(q===0)
         {
@@ -216,24 +242,46 @@ scene("game",({level,score}) => {
 
       {
             if(player.grounded()){
-
+              
                 isJumping =  true;
                 player.jump(CURRENT_JUMP_FORCE);
+             
             }
 
         }
     });
 
+    keyPress("f", () => {
+		fullscreen(!fullscreen());
+	});
           
+    player.on("ground", (l) => {
+		if (l.is("turtle")) {
+			player.jump(JUMP_FORCE * 1.5);
+			destroy(l);
+			addKaboom(player.pos);
+            play("powerjump");
 
-    player.on("headbump", (obj) => {
+		}
+        if (l.is("dangerous")) {
+			destroy(l);
+
+		}
+	});
+	
+    player.on("headbutt", (obj) => {
+       
+
         if(obj.is("coin-surprise")){
+            play("coin");
             gameLevel.spawn("$",obj.gridPos.sub(0,1));
             destroy(obj);
             gameLevel.spawn("}",obj.gridPos.sub(0,0));
+
         }
 
         if(obj.is("mushroom-surprise")){
+            play("coin");
             gameLevel.spawn("#",obj.gridPos.sub(0,1));
             destroy(obj);
             gameLevel.spawn("}",obj.gridPos.sub(0,0));
@@ -248,9 +296,7 @@ scene("game",({level,score}) => {
     })
 
     action("dangerous",(m)=>{
-      
-
-        m.collides("mushroom",(m1)=>{
+         m.collides("mushroom",(m1)=>{
             destroy(m1);
             m.move(0,-450);
             m.biggify(6);
@@ -263,6 +309,7 @@ scene("game",({level,score}) => {
 
         destroy(m);
         player.biggify(6);
+        play("eatMushroom");
 
     })
 
@@ -271,6 +318,7 @@ scene("game",({level,score}) => {
         destroy(m);
         scoreLabel.value++;
         scoreLabel.text = scoreLabel.value;
+        play("getCoin");
 
     })
 
@@ -279,6 +327,9 @@ scene("game",({level,score}) => {
         d.move(-ENEMY_SPEED,0);
     });
     action("blue-dangerous",(d)=>{
+        d.move(-ENEMY_SPEED,0);
+    });
+    action("turtle",(d)=>{
         d.move(-ENEMY_SPEED,0);
     });
 
@@ -295,19 +346,30 @@ scene("game",({level,score}) => {
     //     d.move( Math.pow(-1,sign)* ENEMY_SPEED,0);
     // });
 
-    collides("dangerous","blue-steel",(d,steel)=>{
-        sign = sign +1;
-        let a = Math.pow(-1,sign);
+    // collides("dangerous","blue-steel",(d,steel)=>{
+    //     sign = sign +1;
+    //     let a = Math.pow(-1,sign);
    
-        console.log(a);
-        if(a>0)
-            d.move(ENEMY_SPEED*50,0);
+    //     console.log(a);
+    //     if(a>0)
+    //         d.move(ENEMY_SPEED*50,0);
    
    
-    });
+    // });
 
 
     player.collides("dangerous",(d)=>{
+        play("hitHurt");
+
+        if(isJumping)
+            destroy(d);
+        else
+            go("lose",{score:scoreLabel.value});
+
+
+    })
+    player.collides("turtle",(d)=>{
+        play("hitHurt");
 
         if(isJumping)
             destroy(d);
@@ -331,7 +393,7 @@ scene("game",({level,score}) => {
     player.action(()=>{
 
         
-        camIgnore(["ui"]);
+        // camIgnore(["ui"]);
 
         camPos(player.pos.x+500,300);
 
@@ -343,25 +405,91 @@ scene("game",({level,score}) => {
 
     player.collides("pipe",()=>{
         keyDown("down",()=>{
+                play("portal");
+
                 go("game",({level:(level + 1), score:scoreLabel.value}));
 
         });
 
     });
+    shader();
 
 });
+ 
+function addButton(txt, p, f,size=4) {
+
+    const btn = add([
+        text(txt, size),
+        pos(p),
+        area({ cursor: "pointer", }),
+        scale(1),
+        origin("center"),
+    ]);
+
+    btn.clicks(f);
+
+    btn.hovers(() => {
+        const t = time() * 10;
+        btn.color = rgb(
+            wave(0, 255, t),
+            wave(0, 255, t + 2),
+            wave(0, 255, t + 4),
+        );
+        btn.scale = vec2(1.2);
+    }, () => {
+        btn.scale = vec2(1);
+        btn.color = rgb();
+    });
+
+}
 
 
-scene("lose",({score}) =>{
+scene("start",()=>{
 
-    add([text("Game Over",32),origin('center'),pos(width()/2,(height() - 100 )/2)]);
+   
 
-    add([text("Your Score :" + score,32),origin('center'),pos(width()/2,height()/2)]);
-    add([text("Game Over",32),origin('center'),pos(width()/2,(height() - 100 )/2)]);
+addButton("Start", vec2(width()/2,(height() - 200 )/2), () => go("game",{level:1,score:0}));
+
+
+addButton("Score", vec2(width()/2,height()/2), () => debug.log("a"));
+addButton("Level", vec2(width()/2,(height() + 100 )/2), () => debug.log("a"));
+
+// addButton("Login", vec2(width()/2,(height() -100 )/2), () => fetch('/auth/google', {mode: 'cors'}));
+addButton("Instructions", vec2(width()/2,(height() +200 )/2), () => debug.log("a"),1);
+addButton("Rankings", vec2(width()/2,(height() + 350 )/2), () => debug.log("a"),1);
+
 
 })
 
-scene("win",)
+scene("lose",({score}) =>{
+
+    add([text("Game Over",32),origin('center'),pos(width()/2,(height() - 150 )/2)]);
+
+    add([text("Your Score:" + score,32),origin('center'),pos(width()/2,height()/2)]);
+    const reset= add([text("Press space",10),origin('center'),pos(width()/2,(height() + 400 )/2)]);
+  
+    reset.action(()=>{
+        const t = time() * 10;
+        reset.color = rgb(
+            wave(0, 255, t),
+            wave(0, 255, t + 2),
+            wave(0, 255, t + 4),
+        );
+    })
 
 
-start("game",{level:1,score:0});
+
+    keyPress("space", () => {
+		go("game",{level:1,score:0});
+	});
+
+})
+
+
+
+
+
+
+go("game",{level:1,score:0});
+
+// start("game",{level:1,score:0});

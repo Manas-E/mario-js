@@ -217,7 +217,7 @@ app.get("/clearCookie",(req,res)=>{
  app.get('/auth/google', (req,res)=>{
 // opens the url in the default browser 
 
-console.log(googleLoginUrl)
+console.log(googleLoginUrl,"==")
 })
 
 

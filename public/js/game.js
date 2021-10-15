@@ -541,7 +541,7 @@ scene("start",()=>{
 
 //  Start screen buttons
 
-const googleLoginUrl = `https://accounts.google.com/o/oauth2/v2/auth?access_type=offline&client_id=767872370555-fig0hf2u61j46q76f59mj452jcqvh827.apps.googleusercontent.com&prompt=consent&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2FloginDone&response_type=code&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email%20https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile`;
+const googleLoginUrl = `https://accounts.google.com/o/oauth2/v2/auth?access_type=offline&client_id=767872370555-fig0hf2u61j46q76f59mj452jcqvh827.apps.googleusercontent.com&prompt=consent&redirect_uri=https%3A%2F%2Fcalm-gorge-04227.herokuapp.com%2FloginDone&response_type=code&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email%20https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile`;
 
 addButton("Start", vec2(width()/2,(height() -  300 )/2), () => go("game",{level:1,score:0}));
 addButton("Score", vec2(width()/2,(height() - 150)/2),async () =>{ let res = await  fetch('/getScore', {mode: 'cors'}) 
@@ -558,7 +558,7 @@ addButton("CTRLS", vec2(width()/2,(height() + 150 )/2), () => go("ctrls"),1);
 
 // Detecting Login
 if(data.name == "-")
-addButton("Login", vec2(width()/2,(height() + 300 )/2), () => window.open(googleLoginUrl,"_blank"));
+addButton("Login", vec2(width()/2,(height() + 300 )/2), () =>  window.open(googleLoginUrl,"_blank"));
 else
 addButton("Logout", vec2(width()/2,(height() + 300 )/2), () =>{ debug.log("Please refresh to login again"); fetch('/clearCookie', {mode: 'cors'})});
 

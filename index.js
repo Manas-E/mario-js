@@ -31,7 +31,7 @@ const { PORT=3000, LOCAL_ADDRESS='0.0.0.0' } = process.env
 
 const stringifiedParams = queryString.stringify({
   client_id: process.env.CLIENT_ID,
-  redirect_uri: 'http://localhost:3000/loginDone',
+  redirect_uri: 'https://calm-gorge-04227.herokuapp.com/loginDone',
   scope: [
     'https://www.googleapis.com/auth/userinfo.email',
     'https://www.googleapis.com/auth/userinfo.profile',

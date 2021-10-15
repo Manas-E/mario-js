@@ -26,6 +26,8 @@ app.use(cookieParser());
 app.use(express.static("public"));
 app.set("view engine","ejs");
 
+const { PORT=3000, LOCAL_ADDRESS='0.0.0.0' } = process.env
+
 
 const stringifiedParams = queryString.stringify({
   client_id: process.env.CLIENT_ID,
@@ -225,6 +227,6 @@ app.get('/auth/google/callback',function(req, res) {
     res.send("wrong redirect")
   });
 
-app.listen(3000, function () {
+app.listen(PORT, LOCAL_ADDRESS, function () {
   console.log('Example app listening on port 3000!');
 });

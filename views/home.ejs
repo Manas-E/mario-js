@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+
+    <title>Simple Mario</title>
+
+    <link href="styles.css" rel="stylesheet"  >
+    <link rel="icon" type="image/png" href="images/Mario.png"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style> 
+    
+    body{
+      margin:0;
+      overflow:hidden;
+    }
+    
+    </style>
+  </head>
+
+  <body >
+
+ 
+  
+
+  <div id="root"></div>
+  <% var  test={name:name,score:score}  %>
+
+
+  <div id="mydiv" data-score=<%= score %>   data-test=<%= JSON.stringify(test)  %>  > </div>
+
+
+<!-- 
+<script src="https://kaboomjs.com/lib/0.5.1/kaboom.js"></script>
+<script src="game.js" ></script> -->
+<script src="https://unpkg.com/kaboom@next/dist/kaboom.js"></script>
+
+<script  src="js/game.js" ></script>
+
+  </body>
+</html>
+

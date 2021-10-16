@@ -199,7 +199,7 @@ var MOVE_SPEED;
                 ]);
 
     // creating level
-    const gameLevel = addLevel(maps[0],levelCfg);
+    const gameLevel = addLevel(maps[level-1],levelCfg);
 
     // Game stats fied on ui layer 
     const scoreLabel= add([text("Score " +score,1), pos(30,40),scale(0.5), layer('ui'),fixed(),
@@ -653,7 +653,8 @@ addButton("< Back", vec2(50,50), () =>{ go("start")});
 
 for(idx=0;idx<levels.length;idx++)
 {
-    addButton(`< ${levels[idx]} > `, vec2(width()/2,(height()- 450 + idx*150)/2), () => debug.log("a"));
+    addButton(`< ${levels[idx]} > `, vec2(width()/2,(height()- 450 + idx*150)/2), () => go("game",{level:idx,score:0})
+    );
 
 }
    

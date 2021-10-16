@@ -9,7 +9,6 @@ import * as queryString from 'query-string';
 import { createRequire } from "module";
 const require = createRequire(import.meta.url);
 
-const sslRedirect = require('heroku-ssl-redirect').default
 
 const ejs =require("ejs");
 let cookieParser = require('cookie-parser');
@@ -21,7 +20,6 @@ var opn = require('opn');
 
 app.use(cors())
 app.use(cookieParser());
-app.use(sslRedirect());
 
 // { origin: 'http://127.0.0.1:3000/auth/google' }
 

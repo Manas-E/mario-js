@@ -227,7 +227,6 @@ var MOVE_SPEED;
         // geting touch coordinates
 
         let pt = pos.x;
-        debug.log(pt);
         // mapping touch with player movement based on coordinates
 
        if(width()<500)
@@ -418,27 +417,18 @@ var MOVE_SPEED;
 
     let sign = 1; 
     
-    action("blue-dangerous",(d)=>{
-        d.collides("blue-steel",()=>{
-             sign = sign +1;
-             let a = Math.pow(-1,sign);
-        
-             console.log(a);
-        })
-       
-        d.move( Math.pow(-1,sign)* ENEMY_SPEED,0);
-    });
+  
 
-    collides("dangerous","blue-steel",(d,steel)=>{
-        sign = sign +1;
-        let a = Math.pow(-1,sign);
+    // collides("dangerous","blue-steel",(d,steel)=>{
+    //     sign = sign +1;
+    //     let a = Math.pow(-1,sign);
    
-        console.log(a);
-        if(a>0)
-            d.move(ENEMY_SPEED*50,0);
+    //     console.log(a);
+    //     if(a>0)
+    //         d.move(ENEMY_SPEED*50,0);
    
    
-    });
+    // });
 
 
     player.collides("dangerous",(d)=>{

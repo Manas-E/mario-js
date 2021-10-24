@@ -1,5 +1,10 @@
 
 // initializing kaboom global variable
+import sprites from "./sprites.js";
+import maps from "./test.js"
+
+import {addButton,addGameLevel} from "./button.js"
+
 
 kaboom({
     global:true,
@@ -10,50 +15,9 @@ kaboom({
     background: [ 0, 0, 0,],
 });
 
+// calling sprites function 
 
-// sprites for level 1
-
-loadSprite("coin","images//coin.png");
-loadSprite("evil-shroom","images//enemy.png");
-loadSprite("brick","images//brick.png");
-loadSprite("mario","images//mario.png");
-loadSprite("mushroom","images//mushroom.png");
-loadSprite("block","images//block.png");
-loadSprite("pipe-top-left","images//ptl.png");
-loadSprite("pipe-top-right","images//ptr.png");
-loadSprite("pipe-bottom-left","images//pbl.png");
-loadSprite("pipe-bottom-right","images//pbr.png");
-loadSprite("unbox","images//unbox.png");
-loadSprite("surprise","images//surprise.png");
-loadSprite("mario1","images//mariol1.png");
-loadSprite("mario2","images//mariol2.png");
-loadSprite("turtle","images//inturtle.png");
-
-
-
-// sprites for level 2
-
-loadSprite("blue-brick","images//blue-brick.png");
-loadSprite("blue-shroom","images//blue-shroom.png");
-loadSprite("blue-steel","images//blue-steel.png");
-loadSprite("blue-surprise","images//blue-surprise.png");
-loadSprite("blue-block","images//blue-block.png");
-
-
-loadSound("powerjump", "sounds/powerjump.wav");
-loadSound("hitHurt","sounds/hitHurt.wav");
-loadSound("portal","sounds/portal.wav");
-loadSound("eatMushroom","sounds/eatMushroom.wav");
-
-loadSound("coin","sounds/coin.wav");
-loadSound("laser","sounds/laser.wav");
-loadSound("powerup","sounds/powerup.wav");
-loadSound("surprise","sounds/surprise.wav");
-
-loadSound("getCoin","sounds/getCoin.wav");
-loadSound("explosion","sounds/explosion.wav");
-loadSound("gameover","sounds/gameover.wav");
-
+sprites();
 
 
 // initializing score and level 
@@ -61,49 +25,16 @@ loadSound("gameover","sounds/gameover.wav");
 let score=0;
 let level=1;
 
-
 // creating main game scene
 
 
-scene("game",({level,score}) => {
+scene("game",({level=0,score}) => {
 
     // creating various layers 
     layers(['bg','obj','ui'],'obj');
 
     // initializing maps array 
-    const maps=[[
-    '                                                         ',
-    '                                                         ',
-    '                                                         ',
     
-    '                                                         ',
-    '                                                         ',
-    '                                                         ',
-    '       %     _*__%_                                                  ',
-    '                                                               ',
-    '                                                         ',
-    '                          &    &    ->                 ',
-    '                        ^  ^ ^  ^   ()                             ',
-    '=========================================     =============================',
-],
-[ 
-'                                                          H',
-'H                                                         H',
-'H                                                         H',
-
-'H                                                         H',
-'H                                                         H',
-'H                                                         H',
-'H           ~@@@@@                                        H',
-'H                                           s               H',
-'H                                        s  s s             H',
-'H                                     s  s  s s   s      -> H',
-'H                          www     s  s  s  s s w s      () H',
-
-'zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz  z  z  z zzzzzzzzzzzzz',]
-];
-    
-
 // initializing game constants
 
 var MOVE_SPEED;
@@ -163,35 +94,36 @@ var MOVE_SPEED;
 
     }
 
+   
     // mapping sprites to characters
     
     const levelCfg={
 
-        width:40,
-        height:40,
-        '=': () => [sprite("block"),area(),solid(),scale(2)],
-        '%': () => [sprite("surprise"),area(),solid(),"coin-surprise",scale(2)],
-        '$': () => [sprite("coin"),area(),"coin",scale(2)],
-        '*': () => [sprite("surprise"),area(),solid(),"mushroom-surprise",scale(2)],
-        '}': () => [sprite("unbox"),area(),solid(),scale(2)],
-        '(': () => [sprite("pipe-bottom-left"),area(),solid(),scale(1.5)],
-        ')': () => [sprite("pipe-bottom-right"),area(),solid(),scale(1)],
-        '-': () => [sprite("pipe-top-left"),area(),solid(),scale(1),"pipe"],
-        '>': () => [sprite("pipe-top-right"),area(),solid(),scale(1),"pipe"],
-        '^': () => [sprite("evil-shroom"),area(),solid(),"dangerous",big(),scale(2)],
-        '#' :() => [sprite("mushroom"),area(),solid(),"mushroom",body(),scale(2)],
-        'w': () => [sprite("blue-shroom"),area(),solid(),"dangerous",big(),scale(1)],
-        'H' : () => [sprite("blue-brick"),area(),solid(),"blue-brick",scale(1.5)],
-        's' : () => [sprite("blue-steel"),area(),solid(),"blue-steel",scale(1.5)],
-        '@' : () => [sprite("blue-surprise"),area(),solid(),"coin-surprise",scale(1)],
-        '~' : () => [sprite("blue-surprise"),area(),solid(),"mushroom-surprise",scale(1)],
-        '&': () => [sprite("turtle"),area(),solid(),"turtle",big(),scale(2)],
-      
-        'z' : () => [sprite("blue-block"),area(),solid(),scale(1)],
-        '_': () => [sprite("brick"),area(),solid(),scale(2),"brick"],
+    width:40,
+    height:40,
+    '=': () => [sprite("block"),area(),solid(),scale(2)],
+    '%': () => [sprite("surprise"),area(),solid(),"coin-surprise",scale(2)],
+    '$': () => [sprite("coin"),area(),"coin",scale(2)],
+    '*': () => [sprite("surprise"),area(),solid(),"mushroom-surprise",scale(2)],
+    '}': () => [sprite("unbox"),area(),solid(),scale(2)],
+    '(': () => [sprite("pipe-bottom-left"),area(),solid(),scale(1.5)],
+    ')': () => [sprite("pipe-bottom-right"),area(),solid(),scale(1)],
+    '-': () => [sprite("pipe-top-left"),area(),solid(),scale(1),"pipe"],
+    '>': () => [sprite("pipe-top-right"),area(),solid(),scale(1),"pipe"],
+    '^': () => [sprite("evil-shroom"),area(),solid(),"dangerous",big(),scale(2)],
+    '#' :() => [sprite("mushroom"),area(),solid(),"mushroom",body(),scale(2)],
+    'w': () => [sprite("blue-shroom"),area(),solid(),"dangerous",big(),scale(1)],
+    'H' : () => [sprite("blue-brick"),area(),solid(),"blue-brick",scale(1.5)],
+    's' : () => [sprite("blue-steel"),area(),solid(),"blue-steel",scale(1.5)],
+    '@' : () => [sprite("blue-surprise"),area(),solid(),"coin-surprise",scale(1)],
+    '~' : () => [sprite("blue-surprise"),area(),solid(),"mushroom-surprise",scale(1)],
+    '&': () => [sprite("turtle"),area(),solid(),"turtle",big(),scale(2)],
+  
+    'z' : () => [sprite("blue-block"),area(),solid(),scale(1)],
+    '_': () => [sprite("brick"),area(),solid(),scale(2),"brick"],
 
     };
-
+    
 
     // creating player object 
     const player = add([sprite("mario"),area(),solid(),
@@ -199,7 +131,7 @@ var MOVE_SPEED;
                 ]);
 
     // creating level
-    const gameLevel = addLevel(maps[level-1],levelCfg);
+    const gameLevel = addLevel(maps[level],levelCfg);
 
     // Game stats fied on ui layer 
     const scoreLabel= add([text("Score " +score,1), pos(30,40),scale(0.5), layer('ui'),fixed(),
@@ -207,7 +139,7 @@ var MOVE_SPEED;
         value:score,
     }]);
 
-    add([text("Level " + level,1),pos(30,6),scale(0.5), layer('ui'),fixed()]);
+    add([text("Level " + level+1,1),pos(30,6),scale(0.5), layer('ui'),fixed()]);
 
     const time = add([text("Time " + leveltime,1),pos(30,80),scale(0.5), layer('ui'),fixed(),"time",{
        value:leveltime}]);
@@ -216,10 +148,11 @@ var MOVE_SPEED;
 
     add([text("<" ,1),pos(25,height()-140),scale(2), layer('ui'),fixed(),"mleft"]);
     add([text(">",1),pos(125,height()-140),scale(2), layer('ui'),fixed(),"mright"]);
+
     if(width()<500)
-    add([text("^",1),pos(width()-100,height()-110),scale(2), layer('ui'),fixed(),"mup"]);
-   else
-   add([text("^",1),pos(width()-300,height()-110),scale(2), layer('ui'),fixed(),"mup"]);
+        add([text("^",1),pos(width()-100,height()-110),scale(2), layer('ui'),fixed(),"mup"]);
+    else
+        add([text("^",1),pos(width()-300,height()-110),scale(2), layer('ui'),fixed(),"mup"]);
 
    // detecting touch
     touchMove((e,pos)=>{
@@ -279,7 +212,8 @@ var MOVE_SPEED;
         
     })
 
-    // Logging keystrokes
+   // Logging keystrokes
+
   
     keyDown("q",()=>{
         if(q===0)
@@ -319,8 +253,8 @@ var MOVE_SPEED;
     keyPress("f", () => {
 		fullscreen(!fullscreen());
 	});
-
-    // detecting collisions
+ 
+// detecting collisions
           
     player.on("ground", (l) => {
 		if (l.is("turtle")) {
@@ -486,35 +420,6 @@ var MOVE_SPEED;
 
 });
  
-// button function for creating buttons 
-
-function addButton(txt, p, f,size=4) {
-
-    const btn = add([
-        text(txt, size),
-        pos(p),
-        area({ cursor: "pointer", }),
-        scale(1),
-        origin("center"),
-    ]);
-
-    btn.clicks(f);
-
-    btn.hovers(() => {
-        const t = time() * 10;
-        btn.color = rgb(
-            wave(0, 255, t),
-            wave(0, 255, t + 2),
-            wave(0, 255, t + 4),
-        );
-        btn.scale = vec2(1.2);
-    }, () => {
-        btn.scale = vec2(1);
-        btn.color = rgb();
-    });
-
-}
-
 
 
 // Start screen scene
@@ -533,7 +438,7 @@ scene("start",()=>{
 
 const googleLoginUrl = `https://accounts.google.com/o/oauth2/v2/auth?access_type=offline&client_id=767872370555-fig0hf2u61j46q76f59mj452jcqvh827.apps.googleusercontent.com&prompt=consent&redirect_uri=https%3A%2F%2Fcalm-gorge-04227.herokuapp.com%2FloginDone&response_type=code&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email%20https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile`;
 
-addButton("Start", vec2(width()/2,(height() -  300 )/2), () => go("game",{level:1,score:0}));
+addButton("Start", vec2(width()/2,(height() -  300 )/2), () => go("game",{level:0,score:0}));
 addButton("Score", vec2(width()/2,(height() - 150)/2),async () =>{ let res = await  fetch('/getScore', {mode: 'cors'}) 
     let scoredata = await res.text();
     console.log(JSON.parse(scoredata),"<<<<<<");
@@ -554,6 +459,7 @@ addButton("Logout", vec2(width()/2,(height() + 300 )/2), () =>{ debug.log("Pleas
 
 
 })
+
 
 scene("score",(scoredata)=>{
     const s = (width()<500)? 0.5 :   1;
@@ -591,8 +497,8 @@ scene("ctrls",()=>{
     var idx=0;
     for(var key of Object.keys(ctrl))
     {
-        add([text(`${key}`,5),pos(width()/2-400, 300 +100*idx)]);
-        add([text(`${ctrl[key]}`,5),pos(width()/2, 300+100*idx)]);
+        add([text(`${key}`,5),pos(width()/2-400, 150 +100*idx)]);
+        add([text(`${ctrl[key]}`,5),pos(width()/2, 150+100*idx)]);
         idx++;
     }
 
@@ -627,29 +533,26 @@ scene("lose",({score}) =>{
     })
 
 
-
+    touchMove(()=>go("game",{level:0,score:0}))
     keyPress("space", () => {
-		go("game",{level:1,score:0});
+		go("game",{level:0,score:0});
 	});
 
 })
 
 
 
-scene("level",(idx=0)=>{
+scene("level",()=>{
 
 const levels=["Classic","Underground"]
 addButton("< Back", vec2(50,50), () =>{ go("start")});
 
-for(idx=0;idx<levels.length;idx++)
+for( var idx=0;idx<levels.length;idx++)
 {
-    addButton(`< ${levels[idx]} > `, vec2(width()/2,(height()- 450 + idx*150)/2), () => go("game",{level:idx,score:0})
+    addGameLevel(`< ${levels[idx]} > `, vec2(width()/2,(height()- 450 + idx*150)/2),idx
     );
 
 }
-   
-
-
 
 })
 

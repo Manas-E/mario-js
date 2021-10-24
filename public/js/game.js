@@ -332,7 +332,7 @@ var MOVE_SPEED;
     player.collides("coin",(m)=>{
 
         destroy(m);
-        scoreLabel.value++;
+        scoreLabel.value+=500;
         scoreLabel.text = scoreLabel.value;
         play("getCoin");
 
@@ -371,7 +371,7 @@ var MOVE_SPEED;
         if(isJumping)
             destroy(d);
         else
-            go("lose",{score: (scoreLabel.value*100 + time.value )      });
+            go("lose",{score: (scoreLabel.value + time.value )      });
 
 
     })
@@ -381,7 +381,7 @@ var MOVE_SPEED;
         if(isJumping)
             destroy(d);
         else
-            go("lose",{score:(scoreLabel.value*100 + time.value ) });
+            go("lose",{score:(scoreLabel.value + time.value ) });
 
 
     })
@@ -404,7 +404,7 @@ var MOVE_SPEED;
         camPos(player.pos.x+400,300);
 
         if(player.pos.y >= FALL)
-            go("lose",{score:(scoreLabel.value*100 + time.value ) });
+            go("lose",{score:(scoreLabel.value + time.value ) });
 
      })
 
@@ -412,7 +412,7 @@ var MOVE_SPEED;
         keyDown("down",()=>{
                 play("portal");
 
-                go("game",({level:(level + 1), score:(scoreLabel.value*100 + time.value ) }));
+                go("game",({level:(level + 1), score:(scoreLabel.value + time.value ) }));
 
         });
 
@@ -459,7 +459,6 @@ addButton("Logout", vec2(width()/2,(height() + 300 )/2), () =>{ debug.log("Pleas
 
 
 })
-
 
 scene("score",(scoredata)=>{
     const s = (width()<500)? 0.5 :   1;
@@ -553,6 +552,9 @@ for( var idx=0;idx<levels.length;idx++)
     );
 
 }
+   
+
+
 
 })
 

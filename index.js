@@ -67,7 +67,7 @@ async function getAccessTokenFromCode(code) {
     data: {
       client_id: process.env.CLIENT_ID,
       client_secret: process.env.CLIENT_SECRET,
-      redirect_uri: 'http://localhost:3000/loginDone',
+      redirect_uri: 'https://calm-gorge-04227.herokuapp.com/loginDone',
       grant_type: 'authorization_code',
       code,
     },

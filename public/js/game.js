@@ -15,7 +15,7 @@ kaboom({
     background: [ 0, 0, 0,],
 });
 
-// calling sprites function 
+// calling sprites function it will load all the images and sound files
 
 sprites();
 
@@ -139,7 +139,7 @@ var MOVE_SPEED;
         value:score,
     }]);
 
-    add([text("Level " + level+1,1),pos(30,6),scale(0.5), layer('ui'),fixed()]);
+    add([text("Level " + parseInt(level+1)),pos(30,6),scale(0.5), layer('ui'),fixed()]);
 
     const time = add([text("Time " + leveltime,1),pos(30,80),scale(0.5), layer('ui'),fixed(),"time",{
        value:leveltime}]);
@@ -412,7 +412,7 @@ var MOVE_SPEED;
         keyDown("down",()=>{
                 play("portal");
 
-                go("game",({level:(level + 1), score:(scoreLabel.value + time.value ) }));
+                go("game",({level:(parseInt(level) + 1), score:(scoreLabel.value + time.value ) }));
 
         });
 

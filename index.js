@@ -23,7 +23,6 @@ app.use(cors())
 app.use(cookieParser());
 app.use(sslRedirect());
 
-// { origin: 'http://127.0.0.1:3000/auth/google' }
 
 app.use(express.static("public"));
 app.set("view engine","ejs");
@@ -124,7 +123,6 @@ app.get("/",function(req,res){
 
 
 app.get('/getScore', async function(req, res) {
-  // Successful authentication, redirect home.
  
   const userData = req.cookies.userData;
 console.log(userData,"::")
@@ -190,20 +188,21 @@ app.get("/updateScore/:val", async (req,res)=>{
   if( len < 10)
   {
     scores.push()
-    console.log(scores)
+    console.log(scores,"......updated.....")
 
   }
   else
   {
    (scores[len-1] > val ) ? console.log(scores,val) : scores[len-1]= val
    scores = scores.sort(function(a, b){return b-a});
+   console.log(scores,">>>>>>>>>>>>>>>>>updated.....")
 
   }
   
   await updateDoc(user, {
       score: scores
 
-  });
+  }).then(()=>{console.log("=======================================")})
   }
 })
 
@@ -223,11 +222,6 @@ console.log(googleLoginUrl,"==")
 })
 
 
-
-app.get('/auth/google/callback',function(req, res) {
-    // Successful authentication, redirect home.
-    res.send("wrong redirect")
-  });
 
 app.listen(PORT, LOCAL_ADDRESS, function () {
   console.log('Example app listening on port 3000!');

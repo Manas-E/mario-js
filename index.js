@@ -187,7 +187,8 @@ app.get("/updateScore/:val", async (req,res)=>{
 
   if( len < 10)
   {
-    scores.push()
+    scores.push(val)
+    scores = scores.sort(function(a, b){return b-a});
     console.log(scores,"......updated.....")
 
   }
@@ -195,6 +196,7 @@ app.get("/updateScore/:val", async (req,res)=>{
   {
    (scores[len-1] > val ) ? console.log(scores,val) : scores[len-1]= val
    scores = scores.sort(function(a, b){return b-a});
+ 
    console.log(scores,">>>>>>>>>>>>>>>>>updated.....")
 
   }

@@ -4,21 +4,26 @@ const sprites = ()=>{
 
 // sprites for level 1
 
-loadSprite("coin","images//coin.png");
-loadSprite("evil-shroom","images//enemy.png");
-loadSprite("brick","images//brick.png");
-loadSprite("mario","images//mario.png");
+loadSprite("coin","images//coin.webp");
+loadSprite("evil-shroom","images//enemy.webp");
+loadSprite("brick","images//brick.webp");
+loadSprite("mario","images//mario.webp");
 loadSprite("mushroom","images//mushroom.png");
-loadSprite("block","images//block.png");
-loadSprite("pipe-top-left","images//ptl.png");
-loadSprite("pipe-top-right","images//ptr.png");
-loadSprite("pipe-bottom-left","images//pbl.png");
-loadSprite("pipe-bottom-right","images//pbr.png");
+loadSprite("block","images//block.webp");
+loadSprite("pipe-top-left","images//ptl.webp");
+loadSprite("pipe-top-right","images//ptr.webp");
+loadSprite("pipe-bottom-left","images//pbl.webp");
+loadSprite("pipe-bottom-right","images//pbr.webp");
 loadSprite("unbox","images//unbox.png");
-loadSprite("surprise","images//surprise.png");
+loadSprite("surprise","images//surprise.webp");
 loadSprite("mario1","images//mariol1.png");
 loadSprite("mario2","images//mariol2.png");
-loadSprite("turtle","images//inturtle.png");
+loadSprite("turtle","images//inturtle.webp");
+loadSprite("castle","images//castle.webp");
+
+
+
+
 
 
 

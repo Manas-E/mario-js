@@ -42,18 +42,21 @@ var MOVE_SPEED;
     if(width()<500)
         MOVE_SPEED = 150;
     else
-        MOVE_SPEED = 240;
+        MOVE_SPEED = 180;
 
     const JUMP_FORCE = 700;
     const BIG_JUMP_FORCE = 850;
     let CURRENT_JUMP_FORCE = JUMP_FORCE;
 
     let isJumping = false;
-    let ENEMY_SPEED=20;
+    let ENEMY_SPEED=50;
 
     let FALL=800;
     let q=0;
-    var leveltime=3500;
+    var leveltime=5000;
+    const cleanUpDist= 600;
+    var sign = 1;   
+    let i=0;
 
 
     // big function for increasing the size of player
@@ -101,26 +104,27 @@ var MOVE_SPEED;
 
     width:40,
     height:40,
-    '=': () => [sprite("block"),area(),solid(),scale(2)],
+    '=': () => [sprite("block"),area(),solid(),scale(2),"removeable"],
     '%': () => [sprite("surprise"),area(),solid(),"coin-surprise",scale(2)],
     '$': () => [sprite("coin"),area(),"coin",scale(2)],
     '*': () => [sprite("surprise"),area(),solid(),"mushroom-surprise",scale(2)],
     '}': () => [sprite("unbox"),area(),solid(),scale(2)],
-    '(': () => [sprite("pipe-bottom-left"),area(),solid(),scale(1.5)],
-    ')': () => [sprite("pipe-bottom-right"),area(),solid(),scale(1)],
-    '-': () => [sprite("pipe-top-left"),area(),solid(),scale(1),"pipe"],
-    '>': () => [sprite("pipe-top-right"),area(),solid(),scale(1),"pipe"],
-    '^': () => [sprite("evil-shroom"),area(),solid(),"dangerous",big(),scale(2)],
+    '(': () => [sprite("pipe-bottom-left"),area(),solid(),scale(1),"pipe","removeable"],
+    ')': () => [sprite("pipe-bottom-right"),area(),solid(),scale(1),"pipe","removeable"],
+    '-': () => [sprite("pipe-top-left"),area(),solid(),scale(1),"pipe","removeable"],
+    '>': () => [sprite("pipe-top-right"),area(),solid(),scale(1),"pipe","removeable"],
+    '^': () => [sprite("evil-shroom"),area(),solid(),body(),"dangerous",big(),scale(2),"removeable"],
     '#' :() => [sprite("mushroom"),area(),solid(),"mushroom",body(),scale(2)],
-    'w': () => [sprite("blue-shroom"),area(),solid(),"dangerous",big(),scale(1)],
-    'H' : () => [sprite("blue-brick"),area(),solid(),"blue-brick",scale(1.5)],
-    's' : () => [sprite("blue-steel"),area(),solid(),"blue-steel",scale(1.5)],
+    'w': () => [sprite("blue-shroom"),area(),body(),solid(),"dangerous",big(),scale(1),"removeable"],
+    'H' : () => [sprite("blue-brick"),area(),solid(),"blue-brick",scale(1.5),"removeable"],
+    's' : () => [sprite("blue-steel"),area(),solid(),"blue-steel",scale(1.5),"removeable"],
     '@' : () => [sprite("blue-surprise"),area(),solid(),"coin-surprise",scale(1)],
     '~' : () => [sprite("blue-surprise"),area(),solid(),"mushroom-surprise",scale(1)],
-    '&': () => [sprite("turtle"),area(),solid(),"turtle",big(),scale(2)],
+    '&': () => [sprite("turtle"),area(),solid(),body(),"turtle",big(),scale(2),"removeable"],
   
-    'z' : () => [sprite("blue-block"),area(),solid(),scale(1)],
-    '_': () => [sprite("brick"),area(),solid(),scale(2),"brick"],
+    'z' : () => [sprite("blue-block"),area(),solid(),scale(1),"removeable"],
+    '_': () => [sprite("brick"),area(),solid(),scale(2),"brick","removeable"],
+    '/': () => [sprite("castle"),area(),"castle"],
 
     };
     
@@ -296,7 +300,7 @@ var MOVE_SPEED;
 
     });
 
-    action("mushroom",(m)=>{
+    onUpdate("mushroom",(m)=>{
         m.move(40,0);
         
     })
@@ -311,24 +315,23 @@ var MOVE_SPEED;
 
     }))
 
-    action("dangerous",(m)=>{
-         m.collides("mushroom",(m1)=>{
-            destroy(m1);
-            m.move(0,-450);
-            m.biggify(6);
+    // onUpdate("dangerous",(m)=>{
+    //      m.collides("mushroom",(m1)=>{
+    //         destroy(m1);
+    //         m.move(0,-450);
+    //         m.biggify(6);
         
-        })
-    })
+    //     })
+    // })
     
 
     player.collides("mushroom",(m)=>{
 
         destroy(m);
-        player.biggify(6);
+        player.biggify(10);
         play("eatMushroom");
 
     })
-
     player.collides("coin",(m)=>{
 
         destroy(m);
@@ -337,22 +340,59 @@ var MOVE_SPEED;
         play("getCoin");
 
     })
+    function debounce(fn,delay){
+
+        clearTimeout(timer1);
+
+        var timer1 = setTimeout(()=>fn(),delay);
+    }
 
 
-    action("dangerous",(d)=>{
-        d.move(-ENEMY_SPEED,0);
-    });
-    action("blue-dangerous",(d)=>{
-        d.move(-ENEMY_SPEED,0);
-    });
-    action("turtle",(d)=>{
-        d.move(-ENEMY_SPEED,0);
-    });
+onUpdate("removeable",(d)=>{
 
-    let sign = 1; 
+    if(player.pos.x> d.pos.x + cleanUpDist)
+    destroy(d)
+
+       
+})
+
+        
+onUpdate("dangerous",(d)=>{    
+    if(player.pos.x + cleanUpDist> d.pos.x )
+    d.move(-ENEMY_SPEED,0);
     
-  
+});
 
+
+onUpdate("turtle",(d)=>{  
+    if(player.pos.x + cleanUpDist> d.pos.x )
+    d.move(-ENEMY_SPEED*sign,0);
+});
+
+
+onCollide("turtle","pipe",(d)=>{
+    if(player.pos.x + 2*cleanUpDist> d.pos.x )
+    debounce(()=>{
+        sign=Math.pow(-1,i)
+        console.log(sign)
+        i++;
+    },10)
+   
+ })
+ onCollide("dangerous","pipe",(d)=>{
+    if(player.pos.x + 2*cleanUpDist> d.pos.x )
+    debounce(()=>{
+        sign=Math.pow(-1,i)
+        console.log(sign)
+        i++;
+    },10)
+   
+ })
+
+if(get("blue-dangerous"))
+onUpdate("blue-dangerous",(d)=>{
+    d.move(-ENEMY_SPEED,0);
+});
     // collides("dangerous","blue-steel",(d,steel)=>{
     //     sign = sign +1;
     //     let a = Math.pow(-1,sign);
@@ -377,6 +417,8 @@ var MOVE_SPEED;
     })
     player.collides("turtle",(d)=>{
         play("hitHurt");
+
+        
 
         if(isJumping)
             destroy(d);
@@ -406,9 +448,16 @@ var MOVE_SPEED;
         if(player.pos.y >= FALL)
             go("lose",{score:(scoreLabel.value + time.value ) });
 
+        if(player.pos.x >= 12100) {
+            play("portal");
+            go("game",({level:(parseInt(level) + 1), score:(scoreLabel.value + time.value ) }));
+
+        }
+   
+
      })
 
-    player.collides("pipe",()=>{
+    player.collides("ptl",()=>{
         keyDown("down",()=>{
                 play("portal");
 

@@ -5,7 +5,6 @@ import maps from "./test.js"
 
 import {addButton,addGameLevel} from "./button.js"
 
-
 kaboom({
     global:true,
     fullscreen:true,
@@ -42,7 +41,7 @@ var MOVE_SPEED;
     if(width()<500)
         MOVE_SPEED = 150;
     else
-        MOVE_SPEED = 180;
+        MOVE_SPEED = 180  ;
 
     const JUMP_FORCE = 700;
     const BIG_JUMP_FORCE = 850;
@@ -56,7 +55,8 @@ var MOVE_SPEED;
     var leveltime=5000;
     const cleanUpDist= 600;
     var sign = 1;   
-    let i=0;
+    let i=1;
+    var timer1;
 
 
     // big function for increasing the size of player
@@ -340,13 +340,9 @@ var MOVE_SPEED;
         play("getCoin");
 
     })
-    function debounce(fn,delay){
+   
 
-        clearTimeout(timer1);
-
-        var timer1 = setTimeout(()=>fn(),delay);
-    }
-
+debug.inspect=true    
 
 onUpdate("removeable",(d)=>{
 
@@ -359,7 +355,7 @@ onUpdate("removeable",(d)=>{
         
 onUpdate("dangerous",(d)=>{    
     if(player.pos.x + cleanUpDist> d.pos.x )
-    d.move(-ENEMY_SPEED,0);
+    d.move(-ENEMY_SPEED*sign,0);
     
 });
 
@@ -370,24 +366,52 @@ onUpdate("turtle",(d)=>{
 });
 
 
-onCollide("turtle","pipe",(d)=>{
-    if(player.pos.x + 2*cleanUpDist> d.pos.x )
-    debounce(()=>{
-        sign=Math.pow(-1,i)
-        console.log(sign)
-        i++;
-    },10)
+// onCollide("turtle","*",(d)=>{
+//     if(player.pos.x + 2*cleanUpDist> d.pos.x )
+//     throttle(()=>{
+//         sign=Math.pow(-1,i)
+//         console.log(sign,i)
+//         if(timer1)
+//             i++;
+//     },5000)
    
- })
- onCollide("dangerous","pipe",(d)=>{
-    if(player.pos.x + 2*cleanUpDist> d.pos.x )
-    debounce(()=>{
-        sign=Math.pow(-1,i)
-        console.log(sign)
-        i++;
-    },10)
+//  })
+
+
+// onCollide("turtle","pipe",(d)=>{
+
+//     if(player.pos.x + 2*cleanUpDist> d.pos.x ){
    
- })
+//       throttle(()=>{sign=Math.pow(-1,i)
+//         console.log(sign,i)
+//       if(timer1){
+//         i++;
+      
+//       }},500)
+        
+       
+//     }
+   
+//  })
+
+//  onCollide("dangerous","pipe",(d)=>{
+
+//     if(player.pos.x + 2*cleanUpDist> d.pos.x ){
+   
+      
+//         throttle(()=>{
+//             sign=Math.pow(-1,i)
+//             console.log(sign,i)
+//           if(timer1){
+//             i++;
+        
+//           }},500)
+            
+//     }
+   
+//  })
+
+
 
 if(get("blue-dangerous"))
 onUpdate("blue-dangerous",(d)=>{
@@ -430,6 +454,9 @@ onUpdate("blue-dangerous",(d)=>{
 
     player.action(()=>{
 
+        if(parseInt(level)==1 &&  player.pos.x>=2320) 
+        go("victory")
+
         if(player.grounded())
         {
             isJumping=false;
@@ -448,7 +475,7 @@ onUpdate("blue-dangerous",(d)=>{
         if(player.pos.y >= FALL)
             go("lose",{score:(scoreLabel.value + time.value ) });
 
-        if(player.pos.x >= 12100) {
+        if(player.pos.x >=10700) {
             play("portal");
             go("game",({level:(parseInt(level) + 1), score:(scoreLabel.value + time.value ) }));
 
@@ -466,6 +493,9 @@ onUpdate("blue-dangerous",(d)=>{
         });
 
     });
+
+    
+       
 
 });
  
@@ -607,7 +637,70 @@ for( var idx=0;idx<levels.length;idx++)
 
 })
 
+scene("victory",()=>{
+            play("victory");
 
+            const dialogs = [
+                [ "mario", "Well Done! Soldier" ],
+                [ "mario", "You have done it finally" ],
+                [ "mario", "You have completed this" ],
+                [ "mario", "Game successfully, Congratulations" ],
+               
+            ]
+            
+            let curDialog = 0
+            
+            // Text bubble
+            const textbox = add([
+                rect(width() - 200, 120, { radius: 32 }),
+                origin("center"),
+                pos(center().x, height() - 100),
+                outline(2),
+            ])
+            
+            // Text
+            const txt = add([
+                text("", { size: 32, width: width() - 230 }),
+                pos(textbox.pos),
+                origin("center")
+            ])
+            
+            // Character avatar
+            const avatar = add([
+                sprite("mario"),
+                scale(3),
+                origin("center"),
+                pos(center().sub(0, 50))
+            ])
+   
+            
+            // Update the on screen sprite & text
+            function updateDialog() {
+            
+                const [ char, dialog ] = dialogs[curDialog]
+            
+                // Use a new sprite component to replace the old one
+                avatar.use(sprite(char))
+                // Update the dialog text
+                txt.text = dialog
+            
+            }
+            const interval= setInterval(()=>{ 
+
+              
+                curDialog = (curDialog + 1)
+                if(curDialog>=dialogs.length )
+                clearInterval(interval)
+                else
+                updateDialog()
+            },3000)
+            
+           
+
+            addButton("Restart", vec2(width()/2,50), () =>{ go("start")});
+
+
+})
 go("start",{level:1,score:0});
 
 // start("game",{level:1,score:0});

@@ -27,6 +27,7 @@ loadSprite("castle","images//castle.webp");
 
 
 
+
 // sprites for level 2
 
 loadSprite("blue-brick","images//blue-brick.png");
@@ -49,6 +50,7 @@ loadSound("surprise","sounds/surprise.wav");
 loadSound("getCoin","sounds/getCoin.wav");
 loadSound("explosion","sounds/explosion.wav");
 loadSound("gameover","sounds/gameover.wav");
+loadSound("victory","sounds/victory.mp3");
 
 }
 

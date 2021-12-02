@@ -342,7 +342,6 @@ var MOVE_SPEED;
     })
    
 
-debug.inspect=true    
 
 onUpdate("removeable",(d)=>{
 
